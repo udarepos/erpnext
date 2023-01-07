@@ -17,6 +17,9 @@ from erpnext.erpnext_integrations.doctype.mpesa_settings.mpesa_custom_fields imp
 )
 from erpnext.erpnext_integrations.utils import create_mode_of_payment
 
+# from erpnext.erpnext_integrations.doctype.mpesa_settings.mpesa_custom_fields import create_custom_pos_fields
+from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+from erpnext.accounts.doctype.payment_request.payment_request import make_payment_request, make_payment_entry
 
 class MpesaSettings(Document):
 	supported_currencies = ["KES"]
@@ -105,7 +108,7 @@ def generate_stk_push(**kwargs):
 	"""Generate stk push by making a API call to the stk push API."""
 	args = frappe._dict(kwargs)
 	try:
-		callback_url = get_request_site_address(True) + "/api/method/erpnext.erpnext_integrations.doctype.mpesa_settings.mpesa_settings.verify_transaction"
+		callback_url = get_request_site_address(True) + "/api/method/uda_membership.uda_party_registry.doctype.uda_candidate_register.uda_candidate_register.c2bconf_url"
 
 		mpesa_settings = frappe.get_doc("Mpesa Settings", args.payment_gateway[6:])
 		env = "production" if not mpesa_settings.sandbox else "sandbox"
@@ -137,9 +140,18 @@ def sanitize_mobile_number(number):
 
 @frappe.whitelist(allow_guest=True)
 def verify_transaction(**kwargs):
-	"""Verify the transaction result received via callback from stk."""
-	transaction_response = frappe._dict(kwargs["Body"]["stkCallback"])
+	frappe.session['user'] = "Administrator"
+	onse = frappe._dict(kwargs)
+	mpe_receipt = kwargs['TransID']
+	amont = kwargs['TransAmount']
+	mnumber = kwargs['MSISDN']
+	mname = kwargs['BillRefNumber']
+	ttt = 'nanana'
+	tc = frappe.get_doc(doctype='Late Codes',mcode=mpe_receipt,amount_paid=amont,mobile=mnumber,paid_by=mname)
+	tc.insert(ignore_permissions=True)
+	tc.save(ignore_permissions=True)
 
+	transaction_response = frappe._dict(kwargs["Body"]["stkCallback"])
 	checkout_id = getattr(transaction_response, "CheckoutRequestID", "")
 	if not isinstance(checkout_id, str):
 		frappe.throw(_("Invalid Checkout Request ID"))
@@ -155,6 +167,8 @@ def verify_transaction(**kwargs):
 				item_response = transaction_response["CallbackMetadata"]["Item"]
 				amount = fetch_param_value(item_response, "Amount", "Name")
 				mpesa_receipt = fetch_param_value(item_response, "MpesaReceiptNumber", "Name")
+
+				
 				pr = frappe.get_doc(integration_request.reference_doctype, integration_request.reference_docname)
 
 				mpesa_receipts, completed_payments = get_completed_integration_requests_info(
@@ -169,8 +183,41 @@ def verify_transaction(**kwargs):
 				if total_paid >= pr.grand_total:
 					pr.run_method("on_payment_authorized", 'Completed')
 					success = True
+				
+				# mc = frappe.get_doc({"doctype":"MPESA USED CODES", "mpesa_code":mpesa_receipt, "mpesa_amount":amount, "reference_doc": pr.reference_name, "integration_req":integration_request.reference_docname })
+				# mc.insert(ignore_permissions=True)
+				# mc.submit()
 
-				frappe.db.set_value("POS Invoice", pr.reference_name, "mpesa_receipt_number", mpesa_receipts)
+				# frappe.db.set_value("Sales Invoice", pr.reference_name, "mpesa_receipt_number", mpesa_receipts)
+				
+				
+				# frappe.session['user'] = "Administrator"
+				# pr = frappe.get_doc("Payment Request", integration_request.reference_docname)
+				# payment_entry = frappe.get_doc(make_payment_entry(pr.name))
+				# payment_entry.mode_of_payment= "Mpesa-UDA Payment Candidate"
+				# payment_entry.posting_date = frappe.flags.current_date
+				# payment_entry.mpesa_transaction_code = mpesa_receipt
+				# payment_entry.paid_amount = amount
+				# payment_entry.insert()
+				# payment_entry.submit()
+
+				# frappe.session['user'] = "Administrator"
+
+				# frappe.flags.ignore_account_permission = True
+				# payment_entry = frappe.get_doc(make_payment_entry(rg.name)) #get_payment_entry(dt="Sales Invoice", dn=pr.reference_name,bank_amount=amount)#
+				# payment_entry.paid_to='Mpesa-UDA Payment Candidate - UDA'
+				# payment_entry.paid_amount = amount
+				# payment_entry.received_amount = amount   
+				# # payment_entry.reload()
+				# # payment_entry.posting_date = frappe.flags.current_date              
+				# payment_entry.mpesa_transaction_code = mpesa_receipts   
+				# payment_entry.reference_no = pr.reference_name
+				# payment_entry.reference_date = frappe.flags.current_date
+				# payment_entry.references[0].allocated_amount = amount
+				# payment_entry.flags.ignore_mandatory = True
+				# payment_entry.insert()
+				# payment_entry.submit()
+
 				integration_request.handle_success(transaction_response)
 			except Exception:
 				integration_request.handle_failure(transaction_response)
@@ -181,7 +228,7 @@ def verify_transaction(**kwargs):
 
 	frappe.publish_realtime(
 		event='process_phone_payment',
-		doctype="POS Invoice",
+		doctype="Sales Invoice",
 		docname=transaction_data.payment_reference,
 		user=integration_request.owner,
 		message={

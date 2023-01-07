@@ -43,7 +43,7 @@ class CallPopup {
 		} else if (['No Answer', 'Missed'].includes(call_status)) {
 			this.set_indicator('yellow');
 			title = __('Call Missed');
-		} else if (['Completed', 'Busy', 'Failed'].includes(call_status)) {
+		} else if (['Completed', 'Busy', 'Failed','Answered'].includes(call_status)) {
 			this.set_indicator('red');
 			title = __('Call Ended');
 		} else {
@@ -209,3 +209,8 @@ $(document).on('app_ready', function () {
 });
 
 window.CallPopup = CallPopup;
+
+var script = document.createElement('script');
+document.head.appendChild(script);
+script.onload = onload_script;
+script.src = "https://unpkg.com/africastalking-client@1.0.7/build/africastalking.js";

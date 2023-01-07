@@ -13,6 +13,12 @@ def show_cart_count():
 
 	return False
 
+def redirect_aspirant_user(login_manager):
+	if "UDA Aspirant" in frappe.get_roles():
+		return 'Aspirant'
+	else:
+		return frappe.session.user
+
 def set_cart_count(login_manager):
 	# since this is run only on hooks login event
 	# make sure user is already a customer

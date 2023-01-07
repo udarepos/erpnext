@@ -14,8 +14,20 @@
   "naming_series",
   "salutation",
   "customer_name",
+  "surname",
+  "other_names",
+  "id_no",
+  "position",
+  "county",
+  "constituency",
+  "ward",
+  "polling_station",
   "gender",
   "customer_type",
+  "mobile_number",
+  "dob",
+  "email_address",
+  "special_interest",
   "pan",
   "tax_withholding_category",
   "default_bank_account",
@@ -111,9 +123,9 @@
   {
    "depends_on": "eval:doc.customer_type != 'Company'",
    "fieldname": "gender",
-   "fieldtype": "Link",
+   "fieldtype": "Select",
    "label": "Gender",
-   "options": "Gender"
+   "options": "Female\nMale"
   },
   {
    "default": "Company",
@@ -175,7 +187,6 @@
   {
    "fieldname": "territory",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Territory",
    "oldfieldname": "territory",
@@ -498,12 +509,90 @@
    "options": "Tax Withholding Category"
   },
   {
+   "allow_in_quick_entry": 1,
+   "fieldname": "id_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "ID No / Passport",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "position",
+   "fieldtype": "Select",
+   "label": "Position",
+   "options": "\nMEMBER OF COUNTY ASSEMBLY PARTY LIST\nMEMBER OF NATIONAL ASSEMBLY PARTY LIST\nSENATE PARTY LIST\nMember of County Assembly\nWomen Representative\nMember of National Assembly\nSenator\nDeputy Governor\nGovernor\nDeputy President\nPresident\nLeaders\nTest\nPresident-Nominations\nGovernor-Nominations\nSenator-Nominations\nMember of National Assembly(M.P)-Nominations\nWomen Representative-Nominations\nMember of County Assembly(MCA)-Nominations\nSENATOR BY ELECTIONS\nMEMBER OF COUNTY ASSEMBLY BY ELECTIONS\nMEMBER OF NATIONAL ASSEMBLY BY ELECTIONS\nTESTING"
+  },
+  {
    "fieldname": "opportunity_name",
    "fieldtype": "Link",
    "label": "From Opportunity",
    "no_copy": 1,
    "options": "Opportunity",
    "print_hide": 1
+  },
+  {
+   "fetch_from": "county.county_name",
+   "fieldname": "county",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "County",
+   "options": "Counties"
+  },
+  {
+   "fetch_from": "constituency.constituency_name",
+   "fieldname": "constituency",
+   "fieldtype": "Link",
+   "label": "Constituency",
+   "options": "Constituencies"
+  },
+  {
+   "fetch_from": "ward.caw_code",
+   "fieldname": "ward",
+   "fieldtype": "Link",
+   "label": "Ward",
+   "options": "Wards"
+  },
+  {
+   "fetch_from": "polling_station.polling_centre",
+   "fieldname": "polling_station",
+   "fieldtype": "Link",
+   "label": "Polling Centre",
+   "options": "Polling Centres"
+  },
+  {
+   "fieldname": "mobile_number",
+   "fieldtype": "Data",
+   "label": "Mobile Number"
+  },
+  {
+   "fieldname": "dob",
+   "fieldtype": "Date",
+   "label": "DOB"
+  },
+  {
+   "fieldname": "email_address",
+   "fieldtype": "Data",
+   "label": "Email Address"
+  },
+  {
+   "fieldname": "special_interest",
+   "fieldtype": "Select",
+   "label": "Special Interest",
+   "options": "None\nPWD\nYouth\nWomen\nEthnic Minority\nMarginalized Communities\nGender Top Up\nYouth\nPersons With Disabilities\nMaginalized category-Ethnicity\nWorkers\nWomen\nMinority Groups"
+  },
+  {
+   "fieldname": "surname",
+   "fieldtype": "Data",
+   "label": "Surname"
+  },
+  {
+   "fieldname": "other_names",
+   "fieldtype": "Data",
+   "label": "Other Names"
   }
  ],
  "icon": "fa fa-user",
@@ -517,7 +606,7 @@
    "link_fieldname": "party"
   }
  ],
- "modified": "2021-09-06 17:38:54.196663",
+ "modified": "2022-10-31 15:47:46.820576",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Customer",

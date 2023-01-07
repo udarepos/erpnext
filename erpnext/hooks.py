@@ -2,7 +2,7 @@
 from frappe import _
 
 app_name = "erpnext"
-app_title = "ERPNext"
+app_title = "UDA Portal"
 app_publisher = "Frappe Technologies Pvt. Ltd."
 app_description = """ERP made simple"""
 app_icon = "fa fa-th"
@@ -10,7 +10,7 @@ app_color = "#e74c3c"
 app_email = "info@erpnext.com"
 app_license = "GNU General Public License (v3)"
 source_link = "https://github.com/frappe/erpnext"
-app_logo_url = "/assets/erpnext/images/erpnext-logo.svg"
+app_logo_url = "/assets/frappe/images/uda-logo1.svg"
 
 
 develop_version = '13.x.x-develop'
@@ -51,7 +51,8 @@ additional_print_settings = "erpnext.controllers.print_settings.get_print_settin
 
 on_session_creation = [
 	"erpnext.portal.utils.create_customer_or_supplier",
-	"erpnext.e_commerce.shopping_cart.utils.set_cart_count"
+	"erpnext.e_commerce.shopping_cart.utils.set_cart_count",
+	"erpnext.e_commerce.shopping_cart.utils.redirect_aspirant_user"
 ]
 on_logout = "erpnext.e_commerce.shopping_cart.utils.clear_cart_count"
 
@@ -80,8 +81,8 @@ website_generators = ["Item Group", "Website Item", "BOM", "Sales Partner",
 	"Job Opening", "Student Admission"]
 
 website_context = {
-	"favicon": 	"/assets/erpnext/images/erpnext-favicon.svg",
-	"splash_image": "/assets/erpnext/images/erpnext-logo.svg"
+	"favicon": 	"/assets/frappe/images/uda-favicon.svg",
+	"splash_image": "/assets/frappe/images/uda-logo1.svg"
 }
 
 website_route_rules = [

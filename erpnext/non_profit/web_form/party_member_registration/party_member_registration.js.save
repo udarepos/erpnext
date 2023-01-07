@@ -1,0 +1,35 @@
+frappe.ready(function() {
+	// bind events here
+f	rappe.web_form.after_load = (frm) => {
+    // init script here
+    //console.log("hello")
+    frappe.call({
+        method:"frappe.client.get_list",
+        args:{
+            doctype:"Counties",
+            filters: [
+            ],
+            fields: ['county_name','county_code'],
+            limit_page_length: 60
+        },
+        callback: function(r) {
+            if (r.message) {
+                var options = [];
+                $.each(r.message, function(i,d) {
+                    //console.log(d);
+                    options.push(d.county_name)
+                });
+            //	console.log(options);
+                frappe.web_form.set_df_property('county', 'options', options);
+            //	frm.fields_dict.county.options = options;
+            }
+        }
+        
+    });
+}
+
+
+
+
+
+})

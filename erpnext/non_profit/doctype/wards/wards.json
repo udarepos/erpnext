@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "autoname": "ward_name",
+ "creation": "2021-01-31 12:08:13.085868",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "constituency_name",
+  "ward_name",
+  "caw_code"
+ ],
+ "fields": [
+  {
+   "fieldname": "constituency_name",
+   "fieldtype": "Data",
+   "label": "Constituency Name"
+  },
+  {
+   "fieldname": "ward_name",
+   "fieldtype": "Data",
+   "label": "Ward Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "caw_code",
+   "fieldtype": "Data",
+   "label": "CAW Code"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-01-31 12:22:47.589417",
+ "modified_by": "Administrator",
+ "module": "Non Profit",
+ "name": "Wards",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Guest",
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "search_fields": "constituency_name,ward_name,caw_code",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "ward_name",
+ "track_changes": 1
+}

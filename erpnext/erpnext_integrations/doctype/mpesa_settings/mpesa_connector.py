@@ -111,10 +111,85 @@ class MpesaConnector():
 			"CallBackURL": callback_url,
 			"AccountReference": reference_code,
 			"TransactionDesc": description,
-			"TransactionType": "CustomerPayBillOnline" if self.env == "sandbox" else "CustomerBuyGoodsOnline"
+			"TransactionType": "CustomerPayBillOnline" if self.env == "production" else "CustomerBuyGoodsOnline"
 		}
 		headers = {'Authorization': 'Bearer {0}'.format(self.authentication_token), 'Content-Type': "application/json"}
 
 		saf_url = "{0}{1}".format(self.base_url, "/mpesa/stkpush/v1/processrequest")
+		r = requests.post(saf_url, headers=headers, json=payload)
+		return r.json()
+
+	def stk_query(self, business_shortcode=None, passcode=None, checkoutid=None):
+		"""
+		This method uses Mpesa's Express API to initiate online payment on behalf of a customer.
+
+		Args:
+			business_shortcode (int): The short code of the organization.
+			passcode (str): Get from developer portal
+			checkoutid(str): This is any additional information/comment that can be sent along with the request from your system. MAX 13 characters
+
+		Success Response:
+			CustomerMessage(str): Messages that customers can understand.
+			CheckoutRequestID(str): This is a global unique identifier of the processed checkout transaction request.
+			ResponseDescription(str): Describes Success or failure
+			MerchantRequestID(str): This is a global unique Identifier for any submitted payment request.
+			ResponseCode(int): 0 means success all others are error codes. e.g.404.001.03
+
+		Error Reponse:
+			requestId(str): This is a unique requestID for the payment request
+			errorCode(str): This is a predefined code that indicates the reason for request failure.
+			errorMessage(str): This is a predefined code that indicates the reason for request failure.
+		"""
+
+		time = str(datetime.datetime.now()).split(".")[0].replace("-", "").replace(" ", "").replace(":", "")
+		password = "{0}{1}{2}".format(str(business_shortcode), str(passcode), time)
+		encoded = base64.b64encode(bytes(password, encoding='utf8'))
+		payload = {
+			"BusinessShortCode": business_shortcode,
+			"Password": encoded.decode("utf-8"),
+			"Timestamp": time,
+			"CheckoutRequestID": checkoutid
+		}
+		headers = {'Authorization': 'Bearer {0}'.format(self.authentication_token), 'Content-Type': "application/json"}
+
+		saf_url = "{0}{1}".format(self.base_url, "/mpesa/stkpushquery/v1/query")
+		r = requests.post(saf_url, headers=headers, json=payload)
+		return r.json()
+
+	def transactionstatus_query(self, initiator=None, security_credential=None, transaction_id=None, party_a=None, identifier_type=None,
+					result_url=None, queue_timeout_url=None, remarks=None, occasion=None):
+		"""
+		This method uses Mpesa's Account Balance API to to enquire the balance on a M-Pesa BuyGoods (Till Number).
+
+		Args:
+			initiator (str): Username used to authenticate the transaction.
+			security_credential (str): Generate from developer portal.
+			command_id (str): AccountBalance.
+			party_a (int): Till number being queried.
+			identifier_type (int): Type of organization receiving the transaction. (MSISDN/Till Number/Organization short code)
+			remarks (str): Comments that are sent along with the transaction(maximum 100 characters).
+			queue_timeout_url (str): The url that handles information of timed out transactions.
+			result_url (str): The url that receives results from M-Pesa api call.
+
+		Returns:
+			OriginatorConverstionID (str): The unique request ID for tracking a transaction.
+			ConversationID (str): The unique request ID returned by mpesa for each request made
+			ResponseDescription (str): Response Description message
+		"""
+
+		payload = {
+			"Initiator": initiator,
+			"SecurityCredential": security_credential,
+			"CommandID": "TransactionStatusQuery",
+			"TransactionID": transaction_id,
+			"PartyA": party_a,
+			"IdentifierType": identifier_type,
+			"ResultURL": result_url,
+			"QueueTimeOutURL": queue_timeout_url,
+			"Remarks": remarks,
+			"Occasion": occasion
+		}
+		headers = {'Authorization': 'Bearer {0}'.format(self.authentication_token), 'Content-Type': "application/json"}
+		saf_url = "{0}{1}".format(self.base_url, "/mpesa/transactionstatus/v1/query")
 		r = requests.post(saf_url, headers=headers, json=payload)
 		return r.json()

@@ -1,0 +1,32 @@
+{
+ "attach_print": 0,
+ "channel": "SMS",
+ "condition": "",
+ "creation": "2021-02-01 01:59:11.722933",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Member",
+ "enabled": 1,
+ "event": "Method",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "Please enter verification code to complete your registration.\nCode: {{ doc.verification_code }}",
+ "method": "before_insert",
+ "modified": "2021-02-02 21:31:42.799648",
+ "modified_by": "Administrator",
+ "module": "Non Profit",
+ "name": "Member Register Verification Code",
+ "owner": "Administrator",
+ "property_value": "Draft",
+ "recipients": [
+  {
+   "condition": "",
+   "receiver_by_document_field": "owner",
+   "receiver_by_role": "Guest"
+  }
+ ],
+ "send_system_notification": 1,
+ "send_to_all_assignees": 0,
+ "set_property_after_alert": "status"
+}

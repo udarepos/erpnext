@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "field:mcode",
+ "creation": "2021-10-08 02:25:16.106705",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "mcode",
+  "amount_paid",
+  "mobile",
+  "paid_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "mcode",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Mpesa Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "amount_paid",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Amount Paid"
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Mobile"
+  },
+  {
+   "fieldname": "paid_by",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Paid By"
+  }
+ ],
+ "links": [],
+ "modified": "2022-11-10 15:42:30.789345",
+ "modified_by": "Administrator",
+ "module": "Accounts",
+ "name": "Late Codes",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1
+  }
+ ],
+ "search_fields": "mcode,mobile",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "mcode",
+ "track_changes": 1
+}

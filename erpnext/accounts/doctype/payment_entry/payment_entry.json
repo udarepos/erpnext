@@ -72,6 +72,7 @@
   "deductions",
   "transaction_references",
   "reference_no",
+  "mpesa_transaction_code",
   "column_break_23",
   "reference_date",
   "clearance_date",
@@ -715,6 +716,11 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Paid To Account Type"
+  },
+  {
+   "fieldname": "mpesa_transaction_code",
+   "fieldtype": "Data",
+   "label": "M-PESA Transaction Code"
   }
  ],
  "index_web_pages_for_search": 1,

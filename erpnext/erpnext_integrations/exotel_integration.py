@@ -14,7 +14,7 @@ def handle_incoming_call(**kwargs):
 
 		call_payload = kwargs
 		status = call_payload.get('Status')
-		if status == 'free':
+		if status == 0:
 			return
 
 		call_log = get_call_log(call_payload)

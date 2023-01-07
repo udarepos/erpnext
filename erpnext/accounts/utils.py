@@ -23,7 +23,7 @@ class StockValueAndAccountBalanceOutOfSync(frappe.ValidationError): pass
 class FiscalYearError(frappe.ValidationError): pass
 class PaymentEntryUnlinkError(frappe.ValidationError): pass
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_fiscal_year(date=None, fiscal_year=None, label="Date", verbose=1, company=None, as_dict=False):
 	return get_fiscal_years(date, fiscal_year, label, verbose, company, as_dict=as_dict)[0]
 
